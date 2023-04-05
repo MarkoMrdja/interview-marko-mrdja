@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios'
-import {format} from 'date-fns'
 import './App.css';
 
 
@@ -58,7 +57,7 @@ function App() {
         setTaskList(updatedList)
       } else {
         const data = await axios.post("/api/tasks", {content});
-        setTaskList([...taskList, data.data]);
+        setTaskList([data.data, ...taskList]);
       }
       setContent('');
       setEditContent('');
@@ -90,16 +89,16 @@ function App() {
   }, [])
 
   return (
-    <div className="red lighten-3">
+    <div className="App red lighten-3">
       <section>
-        <h1 className="center-align white-text">ToDo Application</h1>
         <div className='row'>
           <div className='col s12 m8 offset-m2'>
+            <h2>ToDo Application</h2>
             <div className='card'>
               <form onSubmit={handleSubmit}>
                 <div className="card-content row valign-wrapper">
                   <div className="input-field col s10 m10">
-                    <label htmlFor='content'>Content</label>
+                    <label htmlFor='content'>Enter your task</label>
                     <input
                       onChange={(e) => handleChange(e, 'content')}
                       type="text"
