@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.task-content {
+  font-size: 20px;
+}
+
+
+.task-content span.completed {
+  text-decoration: line-through;
+}
+
+
+
+
