@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lolcina23
+      POSTGRES_DB: marko-mrdja-interview
+      
+  backend:
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      POSTGRES_URI: postgresql://postgres:lolcina23@localhost:5432/marko-mrdja-interview
+
+  frontend:
+    build: ./www
+    ports:
+      - "3000:3000"
+
+  nginx:
+    image: nginx:1.22.1-alpine
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - client-body:/var/lib/nginx/tmp  
+
+
+volumes:
+  db-data:
+  nginx-conf:
+  client-body:  
+    
