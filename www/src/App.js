@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios'
 import './App.css';
+import CreateForm from './components/CreateForm';
+import EditForm from './components/EditForm';
+import Tasks from './components/Tasks'
 
 
 function App() {
@@ -59,8 +62,8 @@ function App() {
         const data = await axios.post("/api/tasks", {content});
         setTaskList([data.data, ...taskList]);
       }
-      setContent('');
-      setEditContent('');
+      setContent("");
+      setEditContent("");
       setTaskId(null);
     } catch (err) {
       console.error(err.message);
@@ -89,100 +92,32 @@ function App() {
   }, [])
 
   return (
-    <div className="App red lighten-3">
+    <div className="App">
       <section>
-        <div className='row'>
-          <div className='col s12 m8 offset-m2'>
-            <h2>ToDo Application</h2>
-            <div className='card'>
-              <form onSubmit={handleSubmit}>
-                <div className="card-content row valign-wrapper">
-                  <div className="input-field col s10 m10">
-                    <label htmlFor='content'>Enter your task</label>
-                    <input
-                      onChange={(e) => handleChange(e, 'content')}
-                      type="text"
-                      name="content"
-                      id="content"
-                      value={content}
-                    />
-                  </div>
-                  <div className="col s2 m2 right-align">
-                    <button className="btn red lighten-3 waves-effect" type="submit">Submit</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div> 
+        <CreateForm 
+          content={content}
+          editContent={editContent}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
       </section>
       <section>
         {taskList.map(task => {
-          if(taskId === task.id){
-            return (
-              <div className="row" key={task.id}>
-                <div className="col s12 m8 offset-m2">
-                  <div className="card">
-                    <div className="card-content">
-                      <div className='row'>
-                        <div className="col s1">
-                          <label>
-                            <input type="checkbox" disabled='disabled' checked={task.completed} onChange={() => handleCheck(task)} />
-                            <span></span>
-                          </label>
-                        </div>
-                        <form onSubmit={handleSubmit} key={task.id}>
-                          <div className="col s9" style={{marginTop: "0px"}}>
-                            <input
-                              onChange={(e) => handleChange(e, 'edit')}
-                              type="text"
-                              name="editContent"
-                              id="editContent"
-                              value={editContent}
-                            />
-                          </div>
-                          <div className="col s2 right-align">
-                            <button className="btn red lighten-3" type='submit'><i className="material-icons">done</i></button>
-                            <button className="btn red lighten-3" onClick={() => handleDelete(task.id)}><i className="material-icons">delete</i></button>
-                          </div>
-                        </form>
-                      </div>  
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
+          if (taskId === task.id) {
+            return <EditForm 
+              task={task}
+              editContent={editContent}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              handleDelete={handleDelete}
+            />
           } else {
-            return (
-              <div className="row" key={task.id}>
-                <div className="col s12 m8 offset-m2">
-                  <div className="card">
-                    <div className="card-content">
-                      <div className='row valign-wrapper'>
-                        <div className="col s1">
-                          <label>
-                            <input type="checkbox" checked={task.completed} onChange={() => handleCheck(task)} />
-                            <span></span>
-                          </label>
-                        </div>
-                        <div className="col s9">
-                          <label className='task-content'>
-                          <span className={task.completed ? 'completed' : ''}>{task.content}</span>
-                          </label>
-                        </div>
-                        <div className="col s2 right-align">
-                          <button className="btn red lighten-3" onClick={() => toggleEdit(task)}><i className="material-icons">edit</i></button>
-                          <button className="btn red lighten-3" onClick={() => handleDelete(task.id)}><i className="material-icons">delete</i></button>
-                        </div>
-                      </div>
-                      <div className="col s12">
-                        <p className="right-align grey-text">Created: {task.date_created}</p>
-                      </div>  
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
+            return <Tasks 
+              task={task}
+              handleCheck={handleCheck}
+              toggleEdit={toggleEdit}
+              handleDelete={handleDelete}
+            />
           }
         })}
       </section>

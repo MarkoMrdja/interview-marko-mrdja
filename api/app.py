@@ -23,15 +23,16 @@ class ToDo(db.Model):
     def __repr__(self):
         return f"Task: {self.content}"
     
-    def __init__(self, content):
+    def __init__(self, content, completed=False):
         self.content = content
+        self.completed = completed
     
 
 def format_task(task):
     return {
+        "id": task.id,
         "content": task.content,
         "completed": task.completed,
-        "id": task.id,
         "date_created": task.date_created
     }
 
@@ -64,8 +65,7 @@ def get_tasks():
 @app.route('/api/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = ToDo.query.get_or_404(task_id)
-    formatted_task = format_task(task)
-    return {'task': formatted_task}
+    return {'task': format_task(task)}
 
 
 @app.route('/api/tasks/<int:task_id>', methods=['PUT'])
