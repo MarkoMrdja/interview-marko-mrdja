@@ -23,6 +23,8 @@ function EditForm(props){
                       name="editContent"
                       id="editContent"
                       value={editContent}
+                      maxLength={64}
+                      required
                     />
                   </div>
                   <div className="col s2 right-align">
